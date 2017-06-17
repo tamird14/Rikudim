@@ -2,19 +2,70 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular.js"></script>
+        <script type="text/javascript" src="//ajax.googleapis.com/ajax/libs/angularjs/1.5.5/angular.js"></script>
+        <link rel="stylesheet" href="css/form.css">
         <!-- Angular Material style sheet -->
-        <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+        <link rel="stylesheet"
+              href="https://ajax.googleapis.com/ajax/libs/angular_material/1.1.0/angular-material.min.css">
+        <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     </head>
-    <body ng-app="myApp" dir="rtl">
-        <div ng-controller="MainController">
-            <div class="header">
+    <body ng-app="myApp" dir="rtl" bgcolor="#fafafa">
+        <div ng-controller="MainController" layout="column" flex>
+            <div class="header center" flex>
                 {{title}}
             </div>
 
-            <div class="main" layout="row" layout-xs="column">
+            <div class="main" flex layout="row" layout-xs="column">
+                <div layout=column" flex></div>
                 <div ng-controller="FormController" flex>
-                    <label>שם השיר:<input ng-model="songName"></label><br>
+                    <md-content layout-padding>
+                        <div>
+                            <md-card md-theme-watch>
+                                <form>
+                                    <div layout-gt-sm="row" layout-align="space-between center">
+                                        <md-autocomplete class="hide-validation-error" md-selected-item="songName"
+                                                         md-search-text="searchSong"
+                                                         md-items="song in completeSong(searchSong)" md-item-text="song"
+                                                         md-floating-label="שם השיר">
+                                            <span md-highlight-text="searchSong">{{song}}</span>
+                                        </md-autocomplete>
+                                        <md-autocomplete class="hide-validation-error" md-selected-item="creator"
+                                                         md-search-text="searchText"
+                                                         md-items="creatorName in completeCreator(searchText)"
+                                                         md-item-text="creatorName" md-floating-label="יוצר">
+                                            <span md-highlight-text="searchText">{{creatorName}}</span>
+                                        </md-autocomplete>
+                                    </div>
+                                    <div layout-gt-sm="row" layout-align="space-between center">
+                                        <md-input-container>
+                                            <md-radio-group ng-model="type" layout="row">
+                                                <md-radio-button value="">הכל</md-radio-button>
+                                                <md-radio-button value="circle">מעגל</md-radio-button>
+                                                <md-radio-button value="partners">זוגות</md-radio-button>
+                                                <md-radio-button value="lines">שורות</md-radio-button>
+                                            </md-radio-group>
+                                        </md-input-container>
+                                        <md-input-container>
+                                            <label>שנה</label>
+                                            <md-select ng-model="year">
+                                                <md-option><em></em></md-option>
+                                                <md-option ng-repeat="n in [] | rangeYear" value="{{$index+startYear}}">
+                                                    {{$index+startYear}}
+                                                </md-option>
+                                            </md-select>
+                                        </md-input-container>
+                                    </div>
+
+                                    <md-button class="md-raised" ng-click="searchSongs(songName,creator,type,year)">
+                                        <md-icon class="material-icons">search</md-icon>
+                                        חפש
+                                    </md-button>
+                                </form>
+                            </md-card>
+                        </div>
+                    </md-content>
+
+                    <!--<label>שם השיר:<input ng-model="songName"></label><br>
                     <label>יוצר:<input ng-model="creator"></label><br>
                     <label>סוג ריקוד:</label>
                     <label><input type="radio" ng-model="type" value="">הכל</label>
@@ -29,24 +80,29 @@
                             </option>
                         </select>
                     </label>
+                    <button ng-click="searchSongs(songName,creator,type,year)">חפש</button>-->
 
-                    <button ng-click="searchSongs(songName,creator,type,year)">חפש</button>
                     <p>{{songName}}</p>
                     <p>{{creator}}</p>
                     <p>{{type}}</p>
                     <p>{{year}}</p>
-                    <div ng-repeat="song in dataRecieved">{{song.name}}</div>
+                    <table><tbody>
+                        <div ng-repeat="song in dataRecieved">
+                            <table-row name="{{song.name}}"></table-row>
+                        </div>
+                    </tbody></table>
                 </div>
-                <div flex>adasdsadasd</div>
                 <div flex>4rjemdr4</div>
             </div>
         </div>
 
         <!-- Modules -->
         <script src="js/app.js"></script>
+
         <!-- Controllers -->
         <script src="js/controllers/MainController.js"></script>
         <script src="js/controllers/FormController.js"></script>
+
         <!-- Services -->
         <script src="js/services/search.js"></script>
 
